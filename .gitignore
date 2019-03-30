@@ -1,0 +1,12 @@
+1. Data_dumping_into_csv.py
+cathy.py
+cinema.py
+fg.py
+gv.py
+*.csv
+proxy.py
+*.rar
+shaw.py
+__pycache__
+ferramentas\__pycache__
+cinemas\__pycache__
