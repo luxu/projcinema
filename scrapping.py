@@ -1,8 +1,5 @@
 import requests
 
-class Scrapping:
-    ...
-
 def scrape(next_page_url,lxml_grab=None,proxies=None):
     headers = {'User-Agent': 'Mozilla/5.0'}
     if proxies !=0 and len(proxies)>0:
