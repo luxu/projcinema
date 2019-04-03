@@ -28,7 +28,6 @@ def carnival(proxies=None):
     else:
         ss = requests.session()
         ss.headers = headers
-
     try:
         res_am = json.loads(ss.get(allmov_url).content)['responseMovies']
     except Exception as e:

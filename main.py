@@ -1,6 +1,7 @@
-from cinemas import shaw, carnival, cathay
+from cinemas import fg #, cathay, shaw,carnival
 
 # shaw.cinemashaw()
 # carnival.carnival()
 # cathay.cathay()
-shaw
+# shaw
+fg.fg()
