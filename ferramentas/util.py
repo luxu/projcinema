@@ -1,4 +1,5 @@
 data = []
+warnings = []
 
 def timeConvert(timeStr):
     time = timeStr.split(':')
@@ -46,3 +47,12 @@ def dateConvert(dateStr):
 def fileWrite(string):
     print(string)
     data.append(string)
+
+def getData():
+    return data
+
+def setWarning(string):
+    warnings.append(string)
+
+def getWarning():
+    return warnings

@@ -4,6 +4,7 @@ cinema.py
 gv.py
 *.csv
 *.json
+*.log
 proxy.py
 *.rar
 __pycache__
