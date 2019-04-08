@@ -49,42 +49,42 @@ start_time = datetime.now()
 #     shaw_counter +=1
 
 #########  CARNIVAL ################## OK
-# carnival_counter=0
-#display = Display(visible=0, size=(800, 600))
-#display.start()
-# while carnival_status == 0 and TRYING_QUOTA > carnival_counter:
-#     try:
-#         carnival.Carnival(proxies=proxies)
-#         carnival_status = 1
-#     except Exception as e:
-#         print(e)
-#         warnings.append("Carnival error scraping")
-#     carnival_counter += 1
-#display.stop()
-#########  CATHAY  ################### OK
-# cathay_counter = 0
-# while cathay_status == 0 and TRYING_QUOTA > cathay_counter:
-#     try:
-#         # cathay(proxies=proxies)
-#         cathay.Cathay(proxies=proxies)
-#         # cathay(proxies=proxies)
-#         cathay_status = 1
-#     except Exception as e:
-#         print(e)
-#         warnings.append("Cathay error scraping")
-#     cathay_counter +=1
-
-########  FG  ##########################
-fg_counter = 0
-while fg_status == 0 and TRYING_QUOTA > fg_counter:
+carnival_counter=0
+# display = Display(visible=0, size=(800, 600))
+# display.start()
+while carnival_status == 0 and TRYING_QUOTA > carnival_counter:
     try:
-        # fg(proxies=proxies)
-        fg.Fg(proxies=proxies)
-        fg_status = 1
+        carnival.Carnival(proxies=proxies)
+        carnival_status = 1
     except Exception as e:
         print(e)
-        util.warnings.append("Fg error scraping")
-    fg_counter += 1
+        warnings.append("Carnival error scraping")
+    carnival_counter += 1
+#display.stop()
+#########  CATHAY  ################### OK
+cathay_counter = 0
+while cathay_status == 0 and TRYING_QUOTA > cathay_counter:
+    try:
+        # cathay(proxies=proxies)
+        cathay.Cathay(proxies=proxies)
+        # cathay(proxies=proxies)
+        cathay_status = 1
+    except Exception as e:
+        print(e)
+        warnings.append("Cathay error scraping")
+    cathay_counter +=1
+
+########  FG  ##########################
+# fg_counter = 0
+# while fg_status == 0 and TRYING_QUOTA > fg_counter:
+#     try:
+#         # fg(proxies=proxies)
+#         fg.Fg(proxies=proxies)
+#         fg_status = 1
+#     except Exception as e:
+#         print(e)
+#         util.warnings.append("Fg error scraping")
+#     fg_counter += 1
 
 ######## WE ############################
 # we_counter = 0

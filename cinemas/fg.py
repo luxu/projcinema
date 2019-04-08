@@ -23,15 +23,27 @@ class Fg:
             soup = self.loadSoup(scraper,link)
             film = soup.select('.movie-list-indvisuals > h2 > b')[0].text
             for caixa in soup.select('.movie-cinema-main'):
+                # nome do cinema
                 hall = caixa.find('div', class_='cinema-title').text.split('-')[1].strip()
+                # self.debug()
                 for caixa in soup.findAll('div', id='content'):
-                    self.debug()
-                    link = caixa.select('.cinema-time-table > ul > li > a')[0]['href']
-                    time = caixa.select('.cinema-time-table > ul > li > a')[0].text.strip()
-                    for dt in caixa.select('#tabs > li > a > span'):
-                        date = dt.text.strip()
-                        line = f'{film},{hall},{hall},{date},{time},{link}'
-                        util.fileWrite(line )
+                    cxdate = caixa.select('#tabs > li')
+                    for d in cxdate:
+                        date = d.select('a > span')[0].text
+                        for d in caixa.select('#my-tab-content'):
+                            for c in d.select('.cinema-time-table > ul'):
+                                time = c.li.text
+                                link = c.a['href']
+                                line = f'{film},{hall},{hall},{date},{time},{link}'
+                                util.fileWrite(line)
+
+                    # link = caixa.select('.cinema-time-table > ul > li > a')[0]['href']
+                    # time = caixa.select('.cinema-time-table > ul > li > a')[0].text.strip()
+                    # tem as datas
+                    # for dt in caixa.select('#tabs > li > a > span'):
+                    #     date = dt.text.strip()
+                    #     line = f'{film},{hall},{hall},{date},{time},{link}'
+
 
         print("<<<<< fg cinema process ended >>>>>")
 
