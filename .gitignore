@@ -1,7 +1,6 @@
 1. Data_dumping_into_csv.py
 cathy.py
 cinema.py
-gv.py
 *.csv
 *.json
 *.log
