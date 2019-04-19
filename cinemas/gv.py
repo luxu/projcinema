@@ -11,9 +11,11 @@ from ferramentas import util
 class Gv:
     def __init__(self,proxies=None):
         print("<<<<< gv cinema process started >>>>>")
-        proxies = ''#validate_proxies(get_proxys(),"https://www.gv.com.sg")
+        # proxies = validate_proxies(get_proxys(),"https://www.gv.com.sg")
+        proxies = util.validate_proxies(proxies,"https://www.gv.com.sg")
         dateArray = []
         dateArray.append(int(time.mktime(datetime.now().date().timetuple()) * 1000))
+        # self.debug()
         for i in range(1, 7):
             newDate = (datetime.now() + timedelta(days=i)).date()
             unixtime = time.mktime(newDate.timetuple())
@@ -72,8 +74,7 @@ class Gv:
                         date = n['showDate'].replace('-','/')
                         link = "https://www.gv.com.sg/GVSeatSelection#/cinemaId/" + j['id'] + "/filmCode/" + k['filmCd'] + "/showDate/" + n['showDate'] + "/showTime/" + n['time24'] + "/hallNumber/" + n['hall']
                         line = '"' + film.strip() + '","' + hall + '","' + hall + '","' + date + '","' + timeNow.strip() + '","' + link + '"'
-                        print(line)
-                        # fileWrite(str(line.encode('ascii', 'ignore').decode('ascii')) )
+                        util.fileWrite(str(line.encode('ascii', 'ignore').decode('ascii')) )
         print("<<<<< gv cinema process ended >>>>>")
 
     def loadSoup(self,scraper,url):

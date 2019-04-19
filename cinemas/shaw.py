@@ -8,7 +8,6 @@ sys.path.append('..')
 from ferramentas import util
 from pprint import pprint
 
-
 class Shaw:
     def __init__(self,proxies=None):
         print("<<<<< shaw cinema process started >>>>>")
@@ -43,7 +42,6 @@ class Shaw:
             cookies=cookies,
             data=data
         )
-        self.debug()
         print("<<<<< shaw cinema process ended >>>>>")
 
     def writeJson():

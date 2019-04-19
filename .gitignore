@@ -1,5 +1,3 @@
-1. Data_dumping_into_csv.py
-cathy.py
 cinema.py
 *.csv
 *.json
@@ -9,3 +7,6 @@ proxy.py
 __pycache__
 ferramentas\__pycache__
 cinemas\__pycache__
+log_pdb.py
+teste.py
+IMPORTANTE LEIA LUCIANO.txt

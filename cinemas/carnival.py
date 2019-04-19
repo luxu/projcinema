@@ -11,7 +11,7 @@ from pprint import pprint
 class Carnival:
     def __init__(self,proxies=None):
         print("<<<<< carnival cinema process started >>>>>")
-        # proxies = '0'; #validate_proxies(proxies,MAIN_URL+'/')
+        proxies = validate_proxies(proxies,MAIN_URL+'/')
         link = 'https://carnivalcinemas.sg/#/{0}/{1}'
         headers = {
             'Accept': 'application/json, text/plain, */*',
