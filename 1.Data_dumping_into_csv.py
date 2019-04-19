@@ -53,8 +53,7 @@ def validate_proxies(proxies,url):
         if not bad_proxy:
             print(proxy, "APPROVED!")
             proxys.append({'http':proxy})
-            if len(proxys)==2:
-            # if len(proxys)==10:
+            if len(proxys)==10:
                 break
         elif str(bad_proxy)[0]=='5' and len(proxys)==0:
             print('This service is now unavailable (site from scraping is unavailable)')
@@ -87,7 +86,8 @@ def scrape(next_page_url,lxml_grab=None,proxies=None):
         if response.status_code !=200:
             return 0
     if lxml_grab is None:
-        soup = BeautifulSoup(response.text, "html5lib")
+        # soup = BeautifulSoup(response.text, "html5lib")
+        soup = BeautifulSoup(response.text, "html.parser")
     else:
         soup = paged(response.text)
     return soup
@@ -134,7 +134,8 @@ def scrapeurl(date,viewstate,eventValidation,proxies=None):
     headers = {'User-Agent': 'Mozilla/5.0'}
     response = request(date,viewstate,eventValidation,proxies)
     if response!=0:
-        soup = BeautifulSoup(response.text, "html5lib")
+        # soup = BeautifulSoup(response.text, "html5lib")
+        soup = BeautifulSoup(response.text, "html.parser")
     else:
         return 0
     return soup
@@ -390,8 +391,8 @@ def cathay(proxies = None):
         'WEST MALL',
         'Platinum Movie Suite'
     ]
-    size = 0
-    debug()
+    size = '0'
+    # debug()
     for _div in divArray:
         # div = divArray[i]
         title = titles[size]
@@ -616,6 +617,7 @@ def we(proxies=None):
                     else:
                         hall = '321 Clementi'
                     line = '"' + fname[0] + '","' + hall + '","' + 'WE-Clementi' + '","' + date + '","' + ' '.join([re.findall('\d+:\d+',t.text)[0],t.text[-2:]]) + '","' + t.xpath('@href')[0] + '"'
+                    line = line.encode('ascii', 'ignore')
                     fileWrite(line)
     print("<<<<< we cinema process ended >>>>>")
 
@@ -696,69 +698,70 @@ start_time = datetime.now()
 #     shaw_counter +=1
 
 #########  CARNIVAL ################## DONE
-# carnival_counter=0
-# while carnival_status == 0 and TRYING_QUOTA > carnival_counter:
-#     try:
-#         carnival(proxies=proxies)
-#         carnival_status = 1
-#     except Exception as e:
-#         print(e)
-#         warnings.append("Carnival error scraping")
-#     carnival_counter += 1
-
-#########  CATHAY  ################### DONE
-cathay_counter = 0
-while cathay_status == 0 and TRYING_QUOTA > cathay_counter:
+carnival_counter=0
+while carnival_status == 0 and TRYING_QUOTA > carnival_counter:
     try:
-        cathay(proxies=proxies)
-        cathay_status = 1
+        carnival(proxies=proxies)
+        carnival_status = 1
     except Exception as e:
         print(e)
-        warnings.append("Cathay error scraping")
-    cathay_counter +=1
+        warnings.append("Carnival error scraping")
+    carnival_counter += 1
+
+#########  CATHAY  ################### DONE
+# cathay_counter = 0
+# while cathay_status == 0 and TRYING_QUOTA > cathay_counter:
+#     try:
+#         cathay(proxies=proxies)
+#         cathay_status = 1
+#     except Exception as e:
+#         print(e)
+#         warnings.append("Cathay error scraping")
+#     cathay_counter +=1
 
 ########  FG  ########################## DONE
-# fg_counter = 0
-# while fg_status == 0 and TRYING_QUOTA > fg_counter:
-#     try:
-#         fg(proxies=proxies)
-#         fg_status = 1
-#     except Exception as e:
-#         print(e)
-#         warnings.append("Fg error scraping")
-#     fg_counter += 1
+fg_counter = 0
+while fg_status == 0 and TRYING_QUOTA > fg_counter:
+    try:
+        fg(proxies=proxies)
+        fg_status = 1
+    except Exception as e:
+        print(e)
+        warnings.append("Fg error scraping")
+    fg_counter += 1
 
 ######## WE ############################ HARD
-# we_counter = 0
-# while we_status == 0 and TRYING_QUOTA > we_counter:
-#     try:
-#         we(proxies=proxies)
-#         we_status = 1
-#     except Exception as e:
-#         print e
-#         warnings.append("We error scraping")
-#     we_counter += 1
+we_counter = 0
+while we_status == 0 and TRYING_QUOTA > we_counter:
+    try:
+        we(proxies=proxies)
+        we_status = 1
+    except Exception as e:
+        print e
+        warnings.append("We error scraping")
+    we_counter += 1
 
 ########  GV  ######################### DONE
-# gv_counter = 0
-# while gv_status == 0 and TRYING_QUOTA > gv_counter:
-#     try:
-#         gv(proxies=proxies)
-#         gv_status = 1
-#     except Exception as e:
-#         print(e)
-#         warnings.append("Gv error scraping")
-#     gv_counter +=1
-########  EAGLEWINGS  ######################### TODO
-# eaglewings_counter = 0
-# while eaglewings_status == 0 and TRYING_QUOTA > eaglewings_counter:
-#     try:
-#         eaglewings(proxies=proxies)
-#         eaglewings_status = 1
-#     except Exception as e:
-#         print(e)
-#         warnings.append("Eaglewings error scraping")
-#     eaglewings_counter+=1
+gv_counter = 0
+while gv_status == 0 and TRYING_QUOTA > gv_counter:
+    try:
+        gv(proxies=proxies)
+        gv_status = 1
+    except Exception as e:
+        print(e)
+        warnings.append("Gv error scraping")
+    gv_counter +=1
+
+#######  EAGLEWINGS  ######################### DONE
+eaglewings_counter = 0
+while eaglewings_status == 0 and TRYING_QUOTA > eaglewings_counter:
+    try:
+        eaglewings(proxies=proxies)
+        eaglewings_status = 1
+    except Exception as e:
+        print(e)
+        warnings.append("Eaglewings error scraping")
+    eaglewings_counter+=1
 #######################################
 end_time = datetime.now()
 
@@ -766,8 +769,8 @@ for war in warnings:
     print(war)
 
 data = list(set(data))
-# with open('/home/sriabt/databaseUpload/movie_data.csv','w') as f:
-with open('movie_data.csv','w') as f:
+with open('/home/sriabt/databaseUpload/movie_data.csv','w') as f:
+# with open('movie_data.csv','w') as f:
     for i in data:
         f.write(i+'\n')
 
