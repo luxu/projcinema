@@ -1,4 +1,5 @@
 from pdb import post_mortem
+import sys
 import json
 import random
 import time
@@ -13,10 +14,10 @@ import requests
 import requests.exceptions
 from bs4 import BeautifulSoup
 from lxml import etree, html
-from selenium import webdriver
-from selenium.webdriver.common.proxy import *
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+# from selenium import webdriver
+# from selenium.webdriver.common.proxy import *
+# from selenium.webdriver.firefox.options import Options
+# from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 def is_bad_proxy(pip,url):
     try:
@@ -389,75 +390,58 @@ def cathay(proxies = None):
         'WEST MALL',
         'Platinum Movie Suite'
     ]
-    # for i in range(0, len(divArray)):
     size = 0
-    # debug()
+    debug()
     for _div in divArray:
         # div = divArray[i]
         title = titles[size]
         try:
-            # tabs = soup.xpath('//div[@id="%s"]'%div)[0]
-            tabs = soup.find('div', id=f'{_div}')
-            # dates = tabs.xpath('ul/li/a/span[@class="smalldate"]/text()')
+            tabs = soup.find('div', id=u'{}'.format(_div))
             dates = tabs.findAll('span', class_="smalldate")
-            # containers = tabs.xpath('div[@class="tabbers"]')
             containers = tabs.find('div', class_="tabbers")
-            size = 0 #len(containers)
-            # for i in range(len(containers)):
+            size = 0
             for container in containers:
-                # movie_containers = container.xpath('div')
                 movie_containers = container.find('div')
                 date = dates[size].text
                 timediv = date.split(' ')
                 date = str(timediv[0]) + '/' \
                 + str(month_string_to_number(timediv[1])) + '/' \
                 + str(datetime.now().year)
-                # for j in range(len(movie_containers)):
                 for movie in movie_containers:
                     hall = ''
-                    # hall_div = movie_containers[j].xpath(
-                    #     'div[@class="movie-desc"]/strong'
-                    # )
                     hall_div = container.find('div', class_="movie-desc").strong
-                    # [link.find('strong').text for link in soup.findAll('div', class_="movie-desc")]
                     if (len(hall_div) > 1):
                         hall = hall_div.text
                     film = ''
-                    # film_div = movie_containers[j].xpath(
-                    #     'div[@class="movie-desc"]/span[@class="mobileLink"]/strong/a'
-                    # )
                     film_div = \
                         [link.find('span', class_="mobileLink").text \
                         for link in container.findAll('div', class_="movie-desc")]
                     if (len(film_div) > 0):
                         film = film_div
-                    # if (film == ''):
-                    #     continue
-                    # if (hall == ''):
-                    #     hall = title
-                    # times = movie_containers[j].xpath(
-                    #     'div[@class="movie-timings"] \
-                    #     /div[@class="showtimeitem_time_pms"]/a'
-                    # )
                     times = \
                         [fx.a for fx in container. \
                         findAll(class_="showtimeitem_time_pms")]
                     for k in times:
                         if k.get('data-href') is None:
                             continue
-                        # line = '"' + film[0]
-                        # line += '","' + title + '","' + hall + '","' + date
-                        # line += '","' + k.span.text + '","'
-                        # line += k.get('data-href') + '"'
-                        line = f'{film[0]},{title}{hall},{date},{k.span.text},{k.get("data-href")}'
-                        # line = line.encode('ascii', 'ignore')
+                        line = u'"{}","{},"{}","{}","{}","{}","{}"'.format(
+                            film[0],
+                            title,
+                            hall,
+                            hall,
+                            date,
+                            k.text.split(' ')[0],
+                            k.get("data-href")
+                        )
+                        line = line.encode('ascii', 'ignore')
                         fileWrite(line)
                         time.sleep(1)
                 size=+1
         except Exception as e:
             # setWarning('(Cathay) Error extraction %s '%(title))
             warnings.append('(Cathay) Error extraction %s '%(title))
-            print(f'ERRO.: %s' % e)
+            post_mortem(sys.exc_info()[2])
+            print(u'ERRO.: %s' % e)
             # raise ParserError
     print("<<<<< cathay cinema process ended >>>>>")
 
@@ -476,16 +460,10 @@ def fg(proxies=None):
         # soup = self.loadSoup(link)
         film = soup.select('.movie-list-indvisuals > h2 > b')[0].text
         # verLog(film)
-        # cada box do cinema é pego aqui: soup.select('.movie-cinema-box')
-        # self.debug()
         for section in soup.select('.movie-cinema-box'):
             # nome do cinema:
             # caixa.find('div', class_='cinema-title').text.split('-')[1].strip()
             hall = section.find('div', class_='cinema-title').text.split('-')[1].strip()
-            # verLog(hall)
-            # cada conteúdo daqui: soup.findAll('div', id='content')
-            # contém as datas e horas do cinema
-            # self.debug()
             for div in section.select('#content > ul > li'):
                 date = div.select('.date')[0].text
                 cod = div.select('a')[0]['href']
@@ -494,7 +472,14 @@ def fg(proxies=None):
                 for tm in tabPane:
                     time = tm.a.text.strip()
                     link = tm.a['href']
-                    line = f'{film},{hall},{hall},{date},{time},{link}'
+                    line = u'{},{},{},{},{},{}'.format(
+                        film,
+                        hall,
+                        hall,
+                        date,
+                        time,
+                        link
+                    )
                     fileWrite(line)
     print("<<<<< fg cinema process ended >>>>>")
 
@@ -657,14 +642,17 @@ def eaglewings(proxies=None):
 
             time = hr.find('time')['datetime'].split('T')[1].split(':')
             time = ':'.join((time[0],time[1]))
-
-            link = f"http:{hr['href']}"
-            # //www.eaglewingscinematics.com.sg/Ticketing/visSelectTickets.aspx?cinemacode=0000000001&txtSessionId=5620&visLang=1
-
+            link = u'http:{}'.format(hr['href'])
             hall = hr.find('img')['alt']
             # Classic Hall 3
-
-            line = f'"{film}","{hall}","{hall}","{date}","{time}","{link}'
+            line = u'"{}","{}","{}","{}","{}","{}'.format(
+                film,
+                hall,
+                hall,
+                date,
+                time,
+                link
+            )
             fileWrite(line)
     print("<<<<< eaglewings cinema process ended >>>>>")
 
@@ -676,7 +664,7 @@ def invertDate(date):
         month = date.split('-')[1][1]
     if date.split('-')[2][0] == '0':
         day = date.split('-')[2][1]
-    return f'{day}/{month}/{year}'
+    return u'{}/{}/{}'.format(day,month,year)
 
 def debug():
     from pdb import set_trace
@@ -719,15 +707,15 @@ start_time = datetime.now()
 #     carnival_counter += 1
 
 #########  CATHAY  ################### DONE
-# cathay_counter = 0
-# while cathay_status == 0 and TRYING_QUOTA > cathay_counter:
-#     try:
-#         cathay(proxies=proxies)
-#         cathay_status = 1
-#     except Exception as e:
-#         print(e)
-#         warnings.append("Cathay error scraping")
-#     cathay_counter +=1
+cathay_counter = 0
+while cathay_status == 0 and TRYING_QUOTA > cathay_counter:
+    try:
+        cathay(proxies=proxies)
+        cathay_status = 1
+    except Exception as e:
+        print(e)
+        warnings.append("Cathay error scraping")
+    cathay_counter +=1
 
 ########  FG  ########################## DONE
 # fg_counter = 0
@@ -762,15 +750,15 @@ start_time = datetime.now()
 #         warnings.append("Gv error scraping")
 #     gv_counter +=1
 ########  EAGLEWINGS  ######################### TODO
-eaglewings_counter = 0
-while eaglewings_status == 0 and TRYING_QUOTA > eaglewings_counter:
-    try:
-        eaglewings(proxies=proxies)
-        eaglewings_status = 1
-    except Exception as e:
-        print(e)
-        warnings.append("Eaglewings error scraping")
-    eaglewings_counter+=1
+# eaglewings_counter = 0
+# while eaglewings_status == 0 and TRYING_QUOTA > eaglewings_counter:
+#     try:
+#         eaglewings(proxies=proxies)
+#         eaglewings_status = 1
+#     except Exception as e:
+#         print(e)
+#         warnings.append("Eaglewings error scraping")
+#     eaglewings_counter+=1
 #######################################
 end_time = datetime.now()
 
