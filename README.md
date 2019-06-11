@@ -53,3 +53,8 @@ Main file at the root of the project: "main.py"
 To rotate the scripts: `Python 3.6+`
 
 ##### The file cathay.py generates a file cathay.json that is all the movies of the site, after this is made the reading of the JSON and it gets only the some data as it is printed on the screen
+
+### Important
+Rename the CONFIG.INI.TXT file to CONFIG.INI and 
+configure the password inside.
+
