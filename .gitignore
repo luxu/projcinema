@@ -3,4 +3,6 @@
 *.log
 *.rar
 *.ini
+__pycache__/
+.idea/
 IMPORTANTE LEIA LUCIANO.txt
