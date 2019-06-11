@@ -1,12 +1,5 @@
-cinema.py
 *.csv
 *.json
 *.log
-proxy.py
 *.rar
-__pycache__
-ferramentas\__pycache__
-cinemas\__pycache__
-log_pdb.py
-teste.py
 IMPORTANTE LEIA LUCIANO.txt
