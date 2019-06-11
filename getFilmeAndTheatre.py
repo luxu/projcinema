@@ -1,28 +1,33 @@
 import pymysql
 import os
 from time import sleep
-from pprint import pprint
+import configparser
+
+# Carrega as configurações de arquivo externo
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 def getConnection(sql,fields):
-    # connection = pymysql.connect(
-    #     host="localhost",  # your host
-    #     user="root",  # username
-    #     passwd="iu00q71o",  # password
-    #     db="2sw53e15l",  # name of the database
-    #     connect_timeout=20,
-    #     charset="utf8mb4",
-    #     cursorclass=pymysql.cursors.DictCursor
-    # )
-
-    connection = pymysql.connect(
-        host="db-2sw53e15l.aliwebs.com",
-        user="2sw53e15l",
-        passwd="Cine_7534",
-        db="2sw53e15l",
-        connect_timeout=20,
-        charset="utf8mb4",
-        cursorclass=pymysql.cursors.DictCursor
-    )
+    if (os.name != 'posix'):
+        connection = pymysql.connect(
+            host="localhost",  # your host
+            user="root",  # username
+            passwd="iu00q71o",  # password
+            db="2sw53e15l",  # name of the database
+            connect_timeout=20,
+            charset="utf8mb4",
+            cursorclass=pymysql.cursors.DictCursor
+        )
+    else:
+        connection = pymysql.connect(
+            host="db-2sw53e15l.aliwebs.com",
+            user="2sw53e15l",
+            passwd=config['passwd'],
+            db="2sw53e15l",
+            connect_timeout=20,
+            charset="utf8mb4",
+            cursorclass=pymysql.cursors.DictCursor
+        )
 
     if 'INSERT' in sql or 'UPDATE' in sql or 'DELETE' in sql:
         try:
@@ -251,10 +256,6 @@ def getDeleteMovieDuplicated():
             save_id = []
 
 if __name__ == '__main__':
-    # getTheatreAndMovie()
-    # name = 'Eagle Wings Cinematics (Gold)'
-    # pprint(getNameTheatre(name))
-    #
     idTheatre = '141'
     arrayFilm = getFilmTableMovies(idTheatre)
     nome = ''
@@ -264,11 +265,6 @@ if __name__ == '__main__':
         for film2 in getFilmTableMovies(idTheatre):
             id = film2['id']
             nome2 = film2['Movie_url']
-            # pessoas = [{'nome': 'ana', 'cpf': '1000', 'endereco': 'rua xxxx'},
-            #            {'nome': 'carlos', 'cpf': '7770', 'endereco': 'Rua aaaa'}]
-            # nome = 'carlos'            #
-            # pessoa = len(next((p for p in arrayFilm if p['Movie_url'] == nome2), None))
-            # print(pessoa)
             if nome == nome2:
                 cont+=1
                 if cont > 1:
